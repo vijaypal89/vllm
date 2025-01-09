@@ -70,7 +70,7 @@ async def async_request_tgi(
         st = time.perf_counter()
         most_recent_timestamp = st
         try:
-            async with session.post(url=api_url, json=payload) as response:
+            async with session.post(url=api_url, json=payload, verify_ssl=False) as response:
                 if response.status == 200:
                     async for chunk_bytes in response.content:
                         chunk_bytes = chunk_bytes.strip()
@@ -140,7 +140,7 @@ async def async_request_trt_llm(
         st = time.perf_counter()
         most_recent_timestamp = st
         try:
-            async with session.post(url=api_url, json=payload) as response:
+            async with session.post(url=api_url, json=payload, verify_ssl=False) as response:
                 if response.status == 200:
                     async for chunk_bytes in response.content:
                         chunk_bytes = chunk_bytes.strip()
@@ -205,7 +205,7 @@ async def async_request_deepspeed_mii(
         st = time.perf_counter()
         try:
             async with session.post(url=request_func_input.api_url,
-                                    json=payload) as response:
+                                    json=payload, verify_ssl=False) as response:
                 if response.status == 200:
                     parsed_resp = await response.json()
                     output.latency = time.perf_counter() - st
@@ -242,7 +242,7 @@ async def async_request_openai_completions(
             "max_tokens": request_func_input.output_len,
             "logprobs": request_func_input.logprobs,
             "stream": True,
-            "ignore_eos": request_func_input.ignore_eos,
+            # "ignore_eos": request_func_input.ignore_eos,
         }
         if request_func_input.extra_body:
             payload.update(request_func_input.extra_body)
@@ -259,7 +259,7 @@ async def async_request_openai_completions(
         most_recent_timestamp = st
         try:
             async with session.post(url=api_url, json=payload,
-                                    headers=headers) as response:
+                                    headers=headers, verify_ssl=False) as response:
                 if response.status == 200:
                     first_chunk_received = False
                     async for chunk_bytes in response.content:
@@ -338,7 +338,7 @@ async def async_request_openai_chat_completions(
             "temperature": 0.0,
             "max_completion_tokens": request_func_input.output_len,
             "stream": True,
-            "ignore_eos": request_func_input.ignore_eos,
+            # "ignore_eos": request_func_input.ignore_eos,
         }
         if request_func_input.extra_body:
             payload.update(request_func_input.extra_body)
@@ -356,7 +356,7 @@ async def async_request_openai_chat_completions(
         most_recent_timestamp = st
         try:
             async with session.post(url=api_url, json=payload,
-                                    headers=headers) as response:
+                                    headers=headers, verify_ssl=False) as response:
                 if response.status == 200:
                     async for chunk_bytes in response.content:
                         chunk_bytes = chunk_bytes.strip()
